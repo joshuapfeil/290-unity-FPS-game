@@ -5,6 +5,7 @@ using UnityEngine;
 public class RayShoot : MonoBehaviour
 {
     private Camera _camera;
+    private Vector3 lastHit;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +20,7 @@ public class RayShoot : MonoBehaviour
         float posX = _camera.pixelWidth / 2 - size / 4;
         float posY = _camera.pixelHeight / 2 - size / 2;
         GUI.Label(new Rect(posX, posY, size, size), "*");
+        GUI.Label(new Rect(_camera.pixelWidth - size * 3 / 2, 0 + size * 3 / 2, size * 3, size * 3), lastHit.ToString());
     }
 
     // Update is called once per frame
@@ -32,7 +34,7 @@ public class RayShoot : MonoBehaviour
             if(Physics.Raycast(ray, out hit))
             {
                 
-                Debug.Log("Hit " + hit.point);
+                lastHit = hit.point;
                 GameObject hitObject = hit.transform.gameObject;
                 ReactiveTarget target = hitObject.GetComponent<ReactiveTarget>();
                 if(target != null)
