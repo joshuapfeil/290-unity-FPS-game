@@ -10,7 +10,18 @@ public class PlayerTurn : MonoBehaviour
     public float minimumV= -45f;
     public float maximumV = 45f;
 
+    private enum RotationAxes
+    {
+        MouseXAndY = 0,
+        MouseX = 1,
+        MouseY = 2
+    }
+
+    [SerializeField] private RotationAxes axes;
+
     private float rotationVert = 0f;
+
+    private float rotationHor = 0f;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,13 +31,19 @@ public class PlayerTurn : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //transform.Rotate(0, sensitivityH * Input.GetAxis("Mouse X"), 0);
-        rotationVert -= sensitivityV * Input.GetAxis("Mouse Y");
-        rotationVert = Mathf.Clamp(rotationVert, minimumV, maximumV);
-
-        float delta = Input.GetAxis("Mouse X") * sensitivityH;
-        float rotationHor = transform.localEulerAngles.y + delta;
-        transform.localEulerAngles = new Vector3(rotationVert, rotationHor, 0);
+        if(axes == RotationAxes.MouseY || axes == RotationAxes.MouseXAndY)
+        {
+            rotationVert -= sensitivityV * Input.GetAxis("Mouse Y");
+            rotationVert = Mathf.Clamp(rotationVert, minimumV, maximumV);
+        }
         
+        if(axes == RotationAxes.MouseX || axes == RotationAxes.MouseXAndY)
+        {
+            transform.Rotate(0, sensitivityH * Input.GetAxis("Mouse X"), 0);
+            float delta = Input.GetAxis("Mouse X") * sensitivityH;
+            rotationHor = transform.localEulerAngles.y + delta;
+            
+        }
+        transform.localEulerAngles = new Vector3(rotationVert, rotationHor, 0);
     }
 }
